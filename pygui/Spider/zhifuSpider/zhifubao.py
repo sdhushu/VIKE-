@@ -6,11 +6,7 @@ from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-'''
-本程序提供支付宝数据拉取
-主入口为star_page
-'''
-#把程序封装成类
+
 class ZhiFuBao:
     def __init__(self):
         self.url = 'https://mbillexprod.alipay.com/enterprise/pcMerchYearBill19.htm#/'
@@ -23,7 +19,6 @@ class ZhiFuBao:
         browser = webdriver.Chrome()
         self.login(browser)
 
-    #登录
     def login(self,browser):
         browser.get(self.url)
         time.sleep(1)

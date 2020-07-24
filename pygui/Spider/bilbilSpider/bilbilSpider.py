@@ -5,17 +5,9 @@ from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-'''
-本程序是爬取B站个人数据
-主入口为star_page.py
-'''
-
 result = []
 sum_result = []
-
-#将爬虫程序封装成类
 class BilBil:
-    #初始化属性
     def __init__(self):
         self.url = 'https://passport.bilibili.com/login'
         self.title = []
@@ -29,7 +21,6 @@ class BilBil:
         # browser.maximize_window()
         self.login(browser)
 
-    #登录
     def login(self,browser):
         browser.get(self.url)
         time.sleep(2)
@@ -42,7 +33,6 @@ class BilBil:
         self.data(browser)
         self.user_info(browser)
 
-    #拉取数据
     def data(self,browser):
         time.sleep(1)
         browser.find_element_by_xpath('//*[@id="internationalHeader"]/div[1]/div/div[3]/div[2]/div[6]/span/div[2]/span/span').click()
@@ -94,7 +84,7 @@ class BilBil:
         result.append(user1)
 
 
-    #拿取用户信息
+
     def user_info(self,browser):
         browser.get('https://space.bilibili.com/')
         time.sleep(1)
@@ -116,7 +106,8 @@ class BilBil:
 
 
 
-#将参数传到gui使用
+
+
 def bilibili_go():
     BilBil()
     result.append(sum_result)

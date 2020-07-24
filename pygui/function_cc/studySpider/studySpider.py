@@ -79,17 +79,18 @@ class Login(object):
     #图片存储
     def save_img(self,data_img,user_img):
         data = self.session.get(data_img,headers=self.header)
-        with open('data_info'+'.jpg', 'wb') as f:
+        with open('data_info'+'.png', 'wb') as f:
             f.write(data.content)
 
         user = self.session.get(user_img, headers=self.header)
-        with open('user_info'+'.jpg', 'wb') as f:
+        with open('user_info'+'.png', 'wb') as f:
             f.write(user.content)
+            print('save')
         self.get_file_content()
 
     #图片识别
     def get_file_content(self):
-        with open('data_info.jpg', 'rb') as fp:
+        with open('data_info.png', 'rb') as fp:
             a = fp.read()
         client = AipOcr(self.APP_ID, self.API_KEY, self.SECRET_KEY)
         message = client.basicAccurate(a)  # 返回识别结果
@@ -98,14 +99,14 @@ class Login(object):
             self.i.append(res[s]['words'])
             resturt.append(res[s]['words'])
         #print(self.i)
-        #self.img_text()
+        self.img_text()
 
 
     #图片处理
     def img_text(self):
-        square = Image.open("user_info.jpg")
+        square = Image.open("user_info.png")
         square1 = square.filter(ImageFilter.CONTOUR)
-        square1.save("user_info.jpg")
+        square1.save("user_info1.png")
 
 #
 # if __name__ == '__main__':

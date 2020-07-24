@@ -8,11 +8,6 @@ from pyquery import PyQuery as pq
 from selenium.webdriver.chrome.options import Options
 from PIL import Image
 
-'''
-本程序提供淘宝数据的拉取
-使用多线程进行爬取
-主入口star_page
-'''
 # 用户id
 name = []
 #用户默认地址
@@ -238,14 +233,18 @@ def buy():
     sum_result.append(orders)
     buy.quit()
 
-#多线程
+
+
 threads = []
 threads.append(threading.Thread(target=btlogin))
 threads.append(threading.Thread(target=foot1))
 threads.append(threading.Thread(target=cart1))
 threads.append(threading.Thread(target=buy))
 
-# 参数传给gui使用
+
+
+
+
 def taobao_go():
     a = time.perf_counter()
     cookie()
@@ -255,7 +254,6 @@ def taobao_go():
     start()
     b = time.perf_counter()
     print(b-a)
-    #设置堵塞 以防先执行
     time.sleep(80)
     result.append(name)
     result.append(s_adress)

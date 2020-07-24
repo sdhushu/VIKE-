@@ -11,7 +11,12 @@ from pygui.Spider.qqemailSpider.qq_emailSpiser import emailgo
 from pygui.Spider.tuniuSpider.tuniuSpiser import tuniugo
 from pygui.Spider.baiduSpider.baiduSpider import baidu_go
 from pygui.Spider.jdSpiser.JDSpider import jdgo
+from pygui.Spider.cloudcc.cloud import cloudcc
+from pygui.Spider.vs.imgchange import ResizeImage
+from pygui.Spider.vs.vs import vsgo
+import random
 from tkinter.messagebox import *
+
 import tkinter.messagebox
 import threading
 import webbrowser
@@ -21,7 +26,6 @@ root=Tk()
 root.geometry('1000x650')
 root.resizable(0,0)
 root.title('alun')
-root.resizable(width=True, height=True)
 frame_class=[]
 def frame_group():
     specification=[(1000,90),(180,530),(820,530),(1000,30)]#容器规格，(标题栏，工具栏，首页,底部状态)
@@ -73,6 +77,14 @@ def IO(io):
         i.place_forget()
     io.place(x=0,y=0)
     print(i)
+
+def newIO(io):
+    change_schedule(0, 100)
+    for i in second_level_class:
+        i.place_forget()
+    io.place(x=0,y=0)
+    str_huax()
+
 #top
 f_top=frame_class[0]#标题栏
 topimg=tk.PhotoImage(file='img/topimg.png')
@@ -103,16 +115,21 @@ def set_toolicon():
     button8 = tk.Button(f_tool, image=icon_class[8], command=lambda: IO(second_level_class[8])).place(x=5, y=334)
     button9 = tk.Button(f_tool, image=icon_class[9], command=lambda: IO(second_level_class[9])).place(x=5, y=381)
     button10 = tk.Button(f_tool, image=icon_class[10], command=lambda: IO(second_level_class[10])).place(x=5, y=428)
-    button11 = tk.Button(f_tool, image=icon_class[11], command=lambda: IO(second_level_class[11])).place(x=5, y=475)
+    button11 = tk.Button(f_tool, image=icon_class[11], command=lambda: newIO(second_level_class[11])).place(x=5, y=475)
 set_toolicon()
 #写文件
-def savepage(page, tite):
-    file = Document()
-    file.add_heading(str(tite), level=2)
-    paragraph = file.add_paragraph(str(page))
-    paragraph.add_run('来源').bold = True
-    file.save(str(tite) + 'testDoc.docx')
-    print('成功')
+def savepage(page, title):
+    mm = askokcancel('提示', '确认下载吗？')
+    if mm == True:
+        print('开始啦')
+        print(page)
+        file = Document()
+        file.add_heading(str(title), level=2)
+        paragraph = file.add_paragraph(str(page))
+        paragraph.add_run('来源').bold = True
+        file.save(str(title) + '.docx')
+        print('成功')
+        kk = showinfo('提示', '下载完成')
 #11个页面背景图片设置
 #['Alipay', 'taobao', 'bilibili', 'baidu', 'tuniu', 'boos', 'netease cloud', 'Meituan', 'xuexingnet', 'jingdong', 'about us']
 img_class=[]
@@ -146,7 +163,7 @@ def date():
 f_alipay=second_level_class[0]
 
 re_value=[]
-
+alipay=[]
 def Alipay():
 
     def str_Alippay():
@@ -157,12 +174,19 @@ def Alipay():
         time_data_values = (list(resturd[1].values()))
         print(time_data_values)
         goods_data_values = (list(resturd[2].values()))
+        global re_value
         re_value = goods_data_values
         # print(len(goods_data_values),len(re_value))
         # print(re_value)
         var1.set('用户名:' + str(user_data_values[0]))
         var2.set('账单时间:' + str(time_data_values[0]))
         time.sleep(2)
+        alipay.append(re_value[0])
+        alipay.append(re_value[1])
+        alipay.append(re_value[3])
+        alipay.append(re_value[14])
+        alipay.append(re_value[13])
+
         for i in range(83, 100):
             time.sleep(0.3)
             change_schedule(i, 100)
@@ -210,8 +234,10 @@ for x in sit_x:
         a=a+1
 alipay_user=tk.Label(f_alipay,textvariable=var1,font=('Arial', 25),bg='#FFFFFF',fg='#000000').place(x=40,y=150)
 alipay_billtime=tk.Label(f_alipay,textvariable=var2,font=('Arial', 25),bg='#FFFFFF',fg='#000000').place(x=40,y=200)
-alipaylogin=tk.PhotoImage(file='img/alipaylogin.png')
-alipay_star=tk.Button(f_alipay,command=Alipay,image=alipaylogin).place(x=500,y=90)
+alipaylogin=tk.PhotoImage(file='img/iconx4.png')
+alipay_star=tk.Button(f_alipay,command=Alipay,image=alipaylogin).place(x=400,y=90)
+alipaydw=tk.PhotoImage(file='img/iconx5.png')
+alipay_download=tk.Button(f_alipay,command=lambda:savepage(re_value,'alipaydata'),image=alipaydw).place(x=550,y=90)
 #淘宝
 f_taobao=second_level_class[1]
 tb_var6=tk.StringVar()
@@ -254,6 +280,7 @@ def taobaotime():
     print('开始啦')
     for i in range(10,82):
         change_schedule(i, 100)
+taobaodw=[]
 def taobaostr():
     def taogo():
         mm = askokcancel('提示', '操作之前，请打开您的taobao扫一扫功能，准备识别二维码')
@@ -267,6 +294,8 @@ def taobaostr():
             pass
     def str_taobao():
         result = taobao_go()
+        global taobaodw
+        taobaodw=result
         taoyandedongxi(result)
 
 
@@ -282,10 +311,10 @@ def taobaostr():
 
 
 
-taoblogin=tk.PhotoImage(file='img/button_01.png')
-taobmore=tk.PhotoImage(file='img/button_00.png')
+taoblogin=tk.PhotoImage(file='img/iconx12.png')
+taobmore=tk.PhotoImage(file='img/iconx13.png')
 taobao_star=tk.Button(f_taobao,command=taobaostr,image=taoblogin).place(x=470,y=390)
-taobao_xiangxishuju=tk.Button(f_taobao,command=lambda :savepage(re_value,'taobao'),image=taobmore).place(x=600,y=390)
+taobao_xiangxishuju=tk.Button(f_taobao,command=lambda :savepage(taobaodw,'taobao'),image=taobmore).place(x=600,y=390)
 taobao_1=tk.Label(f_taobao,textvariable=tb_var6,font=('Arial', 10),bg='#FFFFFF',fg='#000000').place(x=60,y=200)
 taobao_2=tk.Label(f_taobao,textvariable=tb_var7,font=('Arial', 10),bg='#FFFFFF',fg='#000000').place(x=60,y=250)
 taobao_3=tk.Label(f_taobao,textvariable=tb_var8,font=('Arial', 10),bg='#FFFFFF',fg='#000000').place(x=60,y=300)
@@ -325,6 +354,7 @@ def time3():
     for i in range(10,83):
         change_schedule(i, 100)
 bilibili_resurt=[]
+bbdw=[]
 def bilibiliw():
     def bil():
         mm = askokcancel('提示', '操作之前，请打开您的bilibil扫一扫功能，准备识别二维码')
@@ -339,6 +369,8 @@ def bilibiliw():
     def str_bilibili():
         new_bilibilis=bilibili_go()
         bilibilixiangxishuju(new_bilibilis)
+        global bbdw
+        bbdw=new_bilibilis
 
 
     new_bilibili = threading.Thread(target=bil)
@@ -348,10 +380,10 @@ def bilibiliw():
     t1.start()
     t2.start()
 
-bilibillogin=tk.PhotoImage(file='img/bilibilbutton_01.png')
-bilibilmore=tk.PhotoImage(file='img/bilibilbutton_00.png')
+bilibillogin=tk.PhotoImage(file='img/iconx2.png')
+bilibilmore=tk.PhotoImage(file='img/iconx3.png')
 bilibil_star=tk.Button(f_bilibili,command=bilibiliw,image=bilibillogin).place(x=70,y=420)
-bilibil_xiangxishuju=tk.Button(f_bilibili,command=lambda :savepage(bilibili_resurt,'bilibili'),image=bilibilmore).place(x=210,y=420)
+bilibil_xiangxishuju=tk.Button(f_bilibili,command=lambda :savepage(bbdw,'bilibili'),image=bilibilmore).place(x=210,y=420)
 bilibili_1=tk.Label(f_bilibili,textvariable=bb_var1,font=('Arial',10),bg='#FFFFFF',fg='#000000').place(x=275,y=220)
 bilibili_2=tk.Label(f_bilibili,textvariable=bb_var2,font=('Arial',10),bg='#FFFFFF',fg='#000000').place(x=275,y=255)
 bilibili_3=tk.Label(f_bilibili,textvariable=bb_var3,font=('Arial',10),bg='#FFFFFF',fg='#000000').place(x=275,y=303)
@@ -389,6 +421,7 @@ def time4():
     for i in range(10,83):
         time.sleep(0.7)
         change_schedule(i, 100)
+bddw=[]
 def baiduww():
     mm = askokcancel('提示', '操作之前，请打开您的baidu扫一扫功能，准备识别二维码')
     if mm == True:
@@ -402,7 +435,9 @@ def baiduww():
 baiduresturd=[]
 def baiduw():
     def str_baidu():
+        global bddw
         new_baidus=baidu_go()
+        bddw=new_baidus
         baiduxiangxishuju(new_baidus)
 
     new_baidu = threading.Thread(target=str_baidu)
@@ -413,10 +448,10 @@ def baiduw():
     t2.start()
 
 
-baidlogin=tk.PhotoImage(file='img/baid1.png')
-baidumore=tk.PhotoImage(file='img/baid2.png')
+baidlogin=tk.PhotoImage(file='img/iconx8.png')
+baidumore=tk.PhotoImage(file='img/iconx9.png')
 baidu_star=tk.Button(f_baidu,command=baiduww,image=baidlogin).place(x=450,y=460)
-baidu_xiangxishuju=tk.Button(f_baidu,command=lambda :savepage(baiduresturd,'baidu.txt'),image=baidumore).place(x=590,y=460)
+baidu_xiangxishuju=tk.Button(f_baidu,command=lambda :savepage(bddw,'baidu.txt'),image=baidumore).place(x=590,y=460)
 baidu_1=tk.Label(f_baidu,textvariable=bdyx_var1,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=62,y=235)
 baidu_2=tk.Label(f_baidu,textvariable=bdyx_var2,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=62,y=290)
 baidu_3=tk.Label(f_baidu,textvariable=bdyx_var3,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=62,y=342)
@@ -461,9 +496,12 @@ def time5():
     for i in range(10,83):
         time.sleep(0.7)
         change_schedule(i, 100)
+tuniudw=[]
 def tuniuw():
     def str_tuniu():
+        global tuniudw
         new_tunius=tuniugo()
+        tuniudw=new_tunius
         tuniuxiangxishuju(new_tunius)
 
     new_tuniu = threading.Thread(target=str_tuniu)
@@ -473,8 +511,10 @@ def tuniuw():
 
     t1.start()
     t2.start()
-tuniu_star=tk.Button(f_tuniu,command=tuniuw,image=alipaylogin).place(x=350,y=100)
-tuniu_xiangxishuju=tk.Button(f_tuniu,command=lambda :opendatas('tuniu.txt'),image=alipaylogin).place(x=550,y=100)
+tu1=tk.PhotoImage(file='img/iconx18.png')
+tu2=tk.PhotoImage(file='img/iconx19.png')
+tuniu_star=tk.Button(f_tuniu,command=tuniuw,image=tu1).place(x=350,y=100)
+tuniu_xiangxishuju=tk.Button(f_tuniu,command=lambda :savepage(tuniudw,'tuniu'),image=tu2).place(x=550,y=100)
 tuniu_1=tk.Label(f_tuniu,textvariable=tuniu_var1,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=55,y=240)
 tuniu_2=tk.Label(f_tuniu,textvariable=tuniu_var2,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=55,y=300)
 tuniu_3=tk.Label(f_tuniu,textvariable=tuniu_var3,font=('Arial', 12),bg='#FFFFFF',fg='#000000').place(x=55,y=350)
@@ -513,9 +553,14 @@ def time6():
         time.sleep(0.7)
         change_schedule(i, 100)
 resturds=[]
+qqdata=[]
+qqdw=[]
 def qqemailw():
     def str_qqemail():
         new_qqemails=emailgo()
+        global qqdw
+        qqdw=new_qqemails
+        qqdata.append(new_qqemails[-1])
         qqemailxiangxishuju(new_qqemails)
 
     new_qqemail = threading.Thread(target=str_qqemail)
@@ -524,9 +569,10 @@ def qqemailw():
     t2 = threading.Thread(target=time6)
     t1.start()
     t2.start()
-
-qqemail_star=tk.Button(f_qqemail,command=qqemailw,image=alipaylogin).place(x=500,y=90)
-qqemail_xiangxishuju=tk.Button(f_qqemail,command=lambda :savepage(resturds,'mail'),image=alipaylogin).place(x=500,y=390)
+qq1=tk.PhotoImage(file='img/iconx14.png')
+qq2=tk.PhotoImage(file='img/iconx15.png')
+qqemail_star=tk.Button(f_qqemail,command=qqemailw,image=qq1).place(x=480,y=430)
+qqemail_xiangxishuju=tk.Button(f_qqemail,command=lambda :savepage(qqdw,'mail'),image=qq2).place(x=630,y=430)
 qqemail_1=tk.Label(f_qqemail,textvariable=qqemail_var1,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=60,y=220)
 qqemail_2=tk.Label(f_qqemail,textvariable=qqemail_var2,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=60,y=300)
 qqemail_3=tk.Label(f_qqemail,textvariable=qqemail_var3,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=60,y=370)
@@ -537,14 +583,14 @@ qqemail_3=tk.Label(f_qqemail,textvariable=qqemail_var3,font=('Arial', 15),bg='#F
 f_wangyiyun=second_level_class[6]
 wangyiyun_var1=tk.StringVar()
 wangyiyun_var2=tk.StringVar()
-wangyiyun_var3=tk.StringVar()
-wangyiyun_var4=tk.StringVar()
-wangyiyun_var5=tk.StringVar()
+
+
+
 wangyiyun_var1.set('欢迎，陌上花开')
 wangyiyun_var2.set('好久不见，今天想听点什么')
-wangyiyun_var3.set('我能找到你最喜欢的音乐吗')
-wangyiyun_var4.set('关于音乐我们准备了这些')
-wangyiyun_var5.set('点击这里 查看详细数据')
+
+
+
 def oppppp():
     playsound('1.mp3')
 def musicopen(path):
@@ -552,11 +598,8 @@ def musicopen(path):
     musicop.start()
 
 def wangyiyunxiangxishuju(a):
-    wangyiyun_var1.set(a[0][0])
-    wangyiyun_var2.set(a[0][2])
-    wangyiyun_var3.set(a[0][1])
-    wangyiyun_var4.set(a[0][3])
-    wangyiyun_var5.set(a[0][4])
+    wangyiyun_var1.set(a[1])
+    wangyiyun_var2.set(a[0])
 
 def wangyiyunkais():
     mm = askokcancel('提示', '操作之前，请打开您的网易云扫一扫功能，准备识别二维码')
@@ -580,96 +623,21 @@ def time7():
         time.sleep(0.7)
         change_schedule(i, 100)
 wwwww=[]
+wydw=[]
 def wangyiyunw():
     def str_wangyiyun():
+        global wydw
         new_wangyiyuns=go()
-        print(new_wangyiyuns)
+        wydw=new_wangyiyuns
+        wangyiyunxiangxishuju(wydw)
 
     str_wangyiyun()
 wangyiyun_open=tk.Button(f_wangyiyun,command=lambda :musicopen('1.mp3'),text='播放').place(x=500,y=100)
 wangyiyun_star=tk.Button(f_wangyiyun,command=wangyiyunkais,text='登陆').place(x=500,y=470)
-wangyiyun_xiangxishuju=tk.Button(f_wangyiyun,command=lambda :savepage(wwwww,'wangyiyun'),text='下载').place(x=600,y=470)
+wangyiyun_xiangxishuju=tk.Button(f_wangyiyun,command=lambda :savepage(wydw,'wangyiyun'),text='下载').place(x=600,y=470)
 wangyiyun_1=tk.Label(f_wangyiyun,textvariable=wangyiyun_var1,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=250)
-wangyiyun_2=tk.Label(f_wangyiyun,textvariable=wangyiyun_var2,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=295)
-wangyiyun_3=tk.Label(f_wangyiyun,textvariable=wangyiyun_var3,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=335)
-wangyiyun_4=tk.Label(f_wangyiyun,textvariable=wangyiyun_var4,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=380)
-wangyiyun_5=tk.Label(f_wangyiyun,textvariable=wangyiyun_var5,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=423)
+wangyiyun_2=tk.Label(f_wangyiyun,textvariable=wangyiyun_var2,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=40,y=395)
 
-
-# #meituan
-# f_meituan=second_level_class[7]
-# meituan_var1=tk.StringVar()
-# meituan_var2=tk.StringVar()
-# meituan_var3=tk.StringVar()
-# meituan_var4=tk.StringVar()
-# meituan_var5=tk.StringVar()
-# meituan_var6=tk.StringVar()
-# meituan_var1.set('好饿好饿好饿')
-# meituan_var2.set('今天还能吃点啥')
-# meituan_var3.set('用了这么久的美团，要不要看看自己的特别关心？')
-# meituan_var4.set('想吃小龙虾')
-# meituan_var5.set('点击试试看')
-# meituan_var6.set('点击试试看')
-# def meituanxiangxishuju():
-#     meituan_var1.set('吴昊，很高兴遇到你')
-#     meituan_var2.set('你最喜欢的一家店是，重庆鸡公煲')
-#     meituan_var3.set('平均6天点一次外卖，果然是良家煮男')
-#     meituan_var4.set('最晚一次消费，0：34 深夜食堂 啤酒小龙虾')
-#     meituan_var5.set('点击这里 查看详细数据')
-# def meituanjiashuju():
-#     user_date.set('爬虫软件开始')
-#     time.sleep(8)
-#     dates = ['正在部署爬虫', '正在拉起登陆窗口', '正在处理登陆信息', '爬虫准备中', '正在爬虫', '正在获取数据标签', '正在获取数据','个人信息获取成功',
-#              '成功提取到地址信息','购物车数据已获取','浏览历史已获取','订单信息已获取','正在完善个人数据','正在提取标签','数据清洗中','数据准备完毕']
-#     for i in dates:
-#         user_date.set(i)
-#         time.sleep(6)
-# def time8():
-#     time.sleep(15)
-#     for i in range(10,83):
-#         time.sleep(0.7)
-#         change_schedule(i, 100)
-# def meituanw():
-#     def str_meituan():
-#         new_meituans=MeiTuan()
-#         resturd=new_meituans.go()
-#         print(resturd)
-#     str_meituan()
-#     #     print(type(new_meituan))
-#     #     # meituanresturd = new_meituans.go()
-#     #     print(new_meituan)
-#     #     f=open('meituan.txt','w')
-#     #     # for i in meituanresturd:
-#     #     #     f.write(i)
-#     #     f.close()
-#     #     for i in range(83, 100):
-#     #         time.sleep(0.3)
-#     #         change_schedule(i, 100)
-#     # for i in range(10):
-#     #     time.sleep(0.1)
-#     #     change_schedule(i, 100)
-#     # new_meituan = threading.Thread(target=str_meituan)
-#     # new_meituan.start()
-#     # t1 = threading.Thread(target=meituanjiashuju)
-#     # t2 = threading.Thread(target=time8)
-#     #
-#     # t1.start()
-#     # t2.start()
-# meituan_l1=tk.Label(f_meituan,text='用户名').place(x=500,y=400)
-# meituan_l2=tk.Label(f_meituan,text='密码').place(x=500,y=430)
-# meituan_e1=tk.Entry(f_meituan,show=None)
-# meituan_e1.place(x=550,y=400)
-# meituan_e2=tk.Entry(f_meituan,show='*')
-# meituan_e2.place(x=550,y=430)
-# meituan_star=tk.Button(f_meituan,command=meituanw,text='查询').place(x=560,y=470)
-# meituan_xiangxishuju=tk.Button(f_meituan,command=lambda :opendatas('xuexinw.txt'),text='下载').place(x=660,y=470)
-# meituan_1=tk.Label(f_meituan,textvariable=meituan_var1,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=215)
-# meituan_2=tk.Label(f_meituan,textvariable=meituan_var2,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=265)
-# meituan_3=tk.Label(f_meituan,textvariable=meituan_var3,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=315)
-# meituan_4=tk.Label(f_meituan,textvariable=meituan_var4,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=365)
-# meituan_5=tk.Label(f_meituan,textvariable=meituan_var5,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=420)
-# meituan_6=tk.Label(f_meituan,textvariable=meituan_var6,font=('Arial', 15),bg='#FFFFFF',fg='#000000').place(x=70,y=470)
-#
 
 #xuexinw
 f_xuexinw=second_level_class[8]
@@ -687,9 +655,10 @@ xx_var11=tk.StringVar()
 xx_var12=tk.StringVar()
 
 
-# im1 = Image.open('/Users/jiguang-macpro/PycharmProjects/untitled1/Allen/user_info.jpg') #支持相对或绝对路径，支持多种格式
-# im2=ImageTk.PhotoImage(im1)
+im1 = Image.open('user.png') #支持相对或绝对路径，支持多种格式
+im2=ImageTk.PhotoImage(im1)
 xuex=[]
+xxdw=[]
 def xuexinww():
     def str_xuexinw():
         user_date.set('爬虫软件开始')
@@ -700,16 +669,29 @@ def xuexinww():
         new_xuexinws=Login(name,password)
         resturt=new_xuexinws.xx()
         xuex.append(resturt)
+        global xxdw
+        xxdw=resturt
         print(resturt)
         for i in range(0, 100):
             change_schedule(i, 100)
 
         canvas = tk.Canvas(f_xuexinw, width=200, height=267)
+        global im1
+        global im2
+        im1 = Image.open('user_info.jpg')  # 支持相对或绝对路径，支持多种格式
+        im2 = ImageTk.PhotoImage(im1)
         canvas.create_image(0,0,anchor='nw',image=im2)
-        canvas.place(x=540, y=110)
-
+        canvas.place(x=550, y=110)
         xx_var1.set(resturt[0])
+        global huaxiang_name
+        huaxiang_name= (resturt[0])
         xx_var2.set(resturt[1])
+        global huaxiang_age
+        huaxiang_age = (resturt[2])
+        global huaxiang_six
+        huaxiang_six = (resturt[1])
+        global huaxiang_xueli
+        huaxiang_xueli = (resturt[6])
         xx_var3.set(resturt[2])
         xx_var4.set(resturt[3])
         xx_var5.set(resturt[4])
@@ -729,7 +711,7 @@ xuexinw_e1.place(x=550,y=400)
 xuexinw_e2=tk.Entry(f_xuexinw,show='*')
 xuexinw_e2.place(x=550,y=430)
 xuexinw_star=tk.Button(f_xuexinw,command=xuexinww,text='查询').place(x=560,y=470)
-xuexinw_xiangxishuju=tk.Button(f_xuexinw,command=lambda :savepage(xuex,'xuexinw'),text='下载').place(x=660,y=470)
+xuexinw_xiangxishuju=tk.Button(f_xuexinw,command=lambda :savepage(xxdw,'xuexinw'),text='下载').place(x=660,y=470)
 xuexinw_1=tk.Label(f_xuexinw,textvariable=xx_var1,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=70,y=190)
 xuexinw_2=tk.Label(f_xuexinw,textvariable=xx_var2,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=70,y=242)
 xuexinw_3=tk.Label(f_xuexinw,textvariable=xx_var3,font=('Arial', 13),bg='#FFFFFF',fg='#000000').place(x=70,y=295)
@@ -781,9 +763,12 @@ def time10():
     for i in range(10,83):
         time.sleep(0.7)
         change_schedule(i, 100)
+jddw=[]
 def jingdongw():
     def str_jingdong():
         new_jingdongs=jdgo()
+        global jddw
+        jddw=new_jingdongs
         x=jingdongxiangxishuju(new_jingdongs)
     for i in range(10):
         time.sleep(0.1)
@@ -795,8 +780,10 @@ def jingdongw():
 
     t1.start()
     t2.start()
-jingdong_star=tk.Button(f_jingdong,command=jingdongw,image=alipaylogin).place(x=400,y=420)
-jingdong_xiangxishuju=tk.Button(f_jingdong,command=lambda :opendatas('jingdong.txt'),image=alipaylogin).place(x=600,y=420)
+jd1=tk.PhotoImage(file='img/iconx6.png')
+jd2=tk.PhotoImage(file='img/iconx7.png')
+jingdong_star=tk.Button(f_jingdong,command=jingdongw,image=jd1).place(x=480,y=420)
+jingdong_xiangxishuju=tk.Button(f_jingdong,command=lambda :savepage(jddw,'jingdong.txt'),image=jd2).place(x=630,y=420)
 jingdong_1=tk.Label(f_jingdong,textvariable=jd_var1,font=('Arial', 11),bg='#FFFFFF',fg='#000000').place(x=60,y=233)
 jingdong_2=tk.Label(f_jingdong,textvariable=jd_var2,font=('Arial', 11),bg='#FFFFFF',fg='#000000').place(x=60,y=280)
 jingdong_3=tk.Label(f_jingdong,textvariable=jd_var3,font=('Arial', 11),bg='#FFFFFF',fg='#000000').place(x=60,y=326)
@@ -808,10 +795,68 @@ jingdong_5=tk.Label(f_jingdong,textvariable=jd_var5,font=('Arial', 11),bg='#FFFF
 f_guany=second_level_class[10]
 aboutimg=tk.PhotoImage(file='img/11.png')
 guanyu_img_sit=tk.Label(f_guany,image=aboutimg).place(x=0,y=0)
+github=tk.Label(f_guany,text='https://github.com/sdhushu/VIKE-').place(x=40,y=300)
+qqemailabout=tk.Label(f_guany,text='QQ群ID :715433204').place(x=40,y=330)
+sentens=tk.Label(f_guany,text='诚挚邀请各位一同参与艾伦项目维护').place(x=40,y=360)
 #人物画像
 f_huax=second_level_class[11]
-huaxiangimg=tk.PhotoImage(file='img/12.png')
-huaxiang_img_sit=tk.Label(f_huax,image=huaxiangimg).place(x=0,y=0)
+img=Image.open('01x.png')
+im3=ImageTk.PhotoImage(img)
+xiaofeishuju = tk.PhotoImage(file='01x.png')
+sumiao = tk.PhotoImage(file='data_info.jpg')
+huaxiang_name='None'
+huaxiang_age='None'
+huaxiang_six='None'
+huaxiang_xueli='None'
+def str_huax():
+    print(qqdata[0][0])
+    cloudcc(str(qqdata[0][0]))
+    ResizeImage('标签云效果图.png','reimg.png',260,130)
+    # vsgo([alipaydata[0])
+    # ResizeImage('xxx.png', 'kshimg.png',320,240)
+    global xiaofeishuju
+    xiaofeishuju = tk.PhotoImage(file='reimg.png')
+    global keshihuashuju
+    keshihuashuju = tk.PhotoImage(file='kshimg.png')
+    global ditushuju
+    ResizeImage('adress.png', 'newadress.png',288,243)
+    global sumiao
+    ResizeImage('user_info1.png', 'user_info2.png', 115, 153)
+    sumiao = tk.PhotoImage(file='user_info2.png')
+    ditushuju = tk.PhotoImage(file='newadress.png')
+    sumiaoshuju_sit=tk.Label(f_huax, image=sumiao).place(x=350, y=150)
+    xiaofeishuju_sit = tk.Label(f_huax, image=xiaofeishuju).place(x=50, y=50)
+    keshihuashuju_sit = tk.Label(f_huax, image=keshihuashuju).place(x=475, y=0)
+    ditushuju_sit = tk.Label(f_huax, image=ditushuju).place(x=485, y=260)
+    w1 = tk.Label(f_huax, text='人际关系云图',font=('Arial', 9)).place(x=140, y=210)
+    w2 = tk.Label(f_huax, text='收入支出图',font=('Arial', 9)).place(x=605, y=230)
+    w3 = tk.Label(f_huax, text='性格测试',font=('Arial', 9)).place(x=140, y=490)
+    w4 = tk.Label(f_huax, text='所在商圈位置',font=('Arial', 9)).place(x=605, y=260)
+    w5 = tk.Label(f_huax, text='姓名',font=('Arial', 9)).place(x=350, y=300)
+    w6 = tk.Label(f_huax, text='年龄',font=('Arial', 9)).place(x=350, y=325)
+    w7 = tk.Label(f_huax, text='性别',font=('Arial', 9)).place(x=350, y=350)
+    w8 = tk.Label(f_huax, text='学历',font=('Arial', 9)).place(x=350, y=375)
+    w9 = tk.Label(f_huax, text=huaxiang_name,font=('Arial', 9)).place(x=380,  y=300)
+    w10 = tk.Label(f_huax, text=huaxiang_age,font=('Arial', 9)).place(x=380, y=325)
+    w11 = tk.Label(f_huax, text=huaxiang_six,font=('Arial', 9)).place(x=380, y=350)
+    w12 = tk.Label(f_huax, text=huaxiang_xueli,font=('Arial', 9)).place(x=380, y=375)
+    a = random.randint(0, 8)
+    list_hobby = [
+        '你需要别人喜欢你和欣赏你，但你通常对自己要求苛刻。\n虽然你在个性上有一些弱点，但你通常能够设法加以弥补。\n你在某些方面的能力并没有得到充分发挥，所以还未能变成你的优势。\n从外表来看，你是一个讲求自律和自制的人，但内心却常常焦虑不安。\n有时候，你会强烈怀疑自己是不是做出了正确的决定或正确的事情。\n你倾向于让自己的生活有所改变和变得丰富多彩，在遇到约束和限制时你\n会感到不满。你很自豪自己是一个能够独立思考的人，\n如果没有令人满意的证据，你不会接受别人的观点和说法。\n不过，你也觉得在别人面前过于直言不讳并不是明智之举，\n有时候你很外向，比较容易亲近，也乐于与人交往，但有时候你却很内向，\n比较小心谨慎，而且沉默寡言。你有很多梦想，\n其中有一些看起来相当不实际。',
+        '你是典型的本质消极但外表热情的人，好像总是有所追求。\n你追求一切让自己的生活过得更好的事物，却又没办法去正视\n自己天生的悲观和灰暗，所以你会表现得既浮躁急切又愤世嫉俗',
+        '你的完美总是表现得过于夸张，有时已经完全脱离真实的生活，\n上升到外太空、异世界层面。所以你的一生与其说在遐想的\n完美中度过，不如说在一种绝对的科幻或玄幻状态中度过，\n你所期望的一切估计只有在科幻或玄幻小说里才能找到并完成吧&oq=你的\n完美总是表现得过于夸张，有时已经完全脱离真实的生活，上升到外太空、\n异世界层面。所以你的一生与其说在遐想的完美中度过，不如说在一\n种绝对的科幻或玄幻状态中度过，你所期望的一切估计\n只有在科幻或玄幻小说里才能找到并完成吧',
+        '你的想法天马行空，不着边际，好奇心和观察力总是天花乱坠，\n无人能及。别人根本不可能知道你的下一步是什么，下一个\n问题的答案在哪里。甚至连你自己都不知道做一件事的目的何在，\n意义在哪。你的人生不是在不停的悬疑中进行，就是在荒诞中落幕',
+        '虽然你十分相信自己，但是当你面对陌生的环境时，会变得不够自信。\n但是你会承认这种情况，因为你有一个坚强的性格。\n你并不需要投入大量的精力，一般来说你会争取自己想要的',
+        '你是很懂得保护自己和观察自己的人，你是向上的积极的，\n你已经给自己制定好了生活目标，你朝着这样的目标在前进着。\n抑郁要找上你也是比较困难的，你很难会抑郁，你面对生活的时候\n不会让自己陷入纠结，你很果断，知道该有什么样的选择，日子过得\n相对轻松',
+        '你经常会有迷茫的感觉，你的抑郁几率是很高的，\n你的生活看起来并没有那么的顺利。你其实是很害怕压力的人，面对生活的\n时候你经常会质疑自己。你想要的东西越多，那么你的情绪就变得\n越是不稳定，这样的日子对你来说是很艰难的，你要注意自己的情\n绪。'
+        '性情温良，重友谊，性格塌实稳重，但有时也比较狡黠。\n事业心一般，对本职工作能认真对待，但对自己专业以外事物没有太大兴趣\n喜欢有规律的工作和生活，不喜欢冒险，家庭观念强，比较善于理财。',
+        '爱幻想，思维较感性，以是否与自己投缘为标准来选择朋友。\n性格显得较孤傲，有时较急躁，有时优柔寡断。事业心较强，\n喜欢有创造性的工作，不喜欢按常规办事。性格倔强，言语犀利，\n不善于妥协。崇尚浪漫的爱情，但想法往往不切合实际。金钱欲望一般\n。',
+        '意志力强，头脑冷静，有较强的领导欲，事业心强，不达目的不罢休。\n外表和善，内心自傲，对有利于自己的人际关系比较看重，\n有时显得性格急噪，咄咄逼人，得理不饶人，不利于自己时顽强\n抗争，不轻易认输。思维理性，对爱情和婚姻的看法很现实，对金钱\n的欲望一般。'
+    ]
+    print(a)
+    text= (list_hobby[a])
+    xingeceshi = tk.Label(f_huax, text=text, font=('Arial', 7), bg='#FFFFFF', fg='#000000').place(x=20, y=332)
+
 #首页
 shouyeimg=tk.PhotoImage(file='img/maddol.png')
 shouye_img_sit=tk.Label(second_level_class[13],image=shouyeimg).place(x=0,y=0)

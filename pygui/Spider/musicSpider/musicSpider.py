@@ -73,22 +73,25 @@ class Music:
         for s in all_num:
             self.num.append(s.text())
         a = dict(zip(self.week,self.num))
-        result.append(a[:3])
+
+        # result.append(a)
         sum_result.append(a)
-        print(a)
         d = [k for k, v in a.items() if len(v) >= 4]
+        print(d)
         result.append(d)
         result.append(all_songs)
         sum_result.append(all_songs)
+        print(self.song_id[0][6:])
         self.song_down()
 
     def song_down(self):
         c = 1
-        http = requests.get('http://music.163.com/song/media/outer/url?'+self.song_id[0],headers=self.headers)
+        http = requests.get('http://music.163.com/song/media/outer/url?'+self.song_id[0][6:],headers=self.headers)
         with open(f'{c}' + '.mp3', 'wb') as f:
             f.write(http.content)
 
 def go():
     Music()
     print(result)
+    result.append(sum_result)
     return result

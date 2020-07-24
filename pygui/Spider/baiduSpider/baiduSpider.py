@@ -7,16 +7,9 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-'''
-本页面提供百度个人数据抓取
-主入口为star_page.py
-'''
-
 result = []
 sum_result = []
-#把抓取程序封装成类 方便调用
 class BaiDu:
-    #初始化属性
     def __init__(self):
         self.url = 'https://www.baidu.com/'
         chrome_options = Options()
@@ -26,7 +19,6 @@ class BaiDu:
         browser = webdriver.Chrome(options=chrome_options)
         self.login(browser)
 
-    #用selenium进行登录界面操作
     def login(self,browser):
         browser.get(self.url)
         browser.find_element_by_link_text('登录').click()
@@ -41,12 +33,10 @@ class BaiDu:
         print('请扫码-----------')
         cookies = browser.get_cookies()
         browser.quit()
-        #将cookie保存到本地 传递给下一个函数使用
         cookie = [item["name"] + "=" + item["value"] for item in cookies]
         cookiestr = ';'.join(item for item in cookie)
         self.data(cookiestr)
 
-    #获取个人数据
     def data(self,cookiestr):
         headers = {
             "Cookie": cookiestr,
@@ -75,7 +65,7 @@ class BaiDu:
 
 
 
-#交给gui界面使用
+
 def baidu_go():
     a = time.perf_counter()
     BaiDu()

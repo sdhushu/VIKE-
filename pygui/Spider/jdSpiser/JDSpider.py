@@ -6,15 +6,8 @@ from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-'''
-本程序提供京东数据拉取
-主入口为star_page
-'''
-
 result = []
 sum_result = []
-
-#把程序封装成类 方便调用
 class JD:
     def __init__(self):
         self.order_title = []
@@ -33,7 +26,6 @@ class JD:
 
         self.order(browser)
 
-    #登录
     def order(self,browser):
         browser.get(self.url)
         browser.save_screenshot('JD.png')
@@ -133,7 +125,6 @@ class JD:
         # print(self.cart_price)
         browser.quit()
 
-#将参数传给gui使用
 def jdgo():
     JD()
     # print(result)

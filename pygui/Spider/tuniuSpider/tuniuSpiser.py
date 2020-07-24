@@ -5,15 +5,9 @@ from PIL import Image
 from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-'''
-本程序提供途牛数据拉取
-主入口 star_page
-'''
 
 result = []
 sum_result = []
-
-#把程序封装成类 方便调用
 class TuNiu:
     def __init__(self):
         self.url = 'https://i.tuniu.com/list'
@@ -31,7 +25,6 @@ class TuNiu:
         browser = webdriver.Chrome(options=chrome_options)
         self.login(browser)
 
-    #登录
     def login(self,browser):
         browser.get(self.url)
         browser.find_element_by_xpath('//*[@id="login-tab-pass"]').click()
@@ -44,7 +37,6 @@ class TuNiu:
         print('请扫码  15秒')
         cookies = browser.get_cookies()
         print(cookies)
-        #数据清洗
         html = pq(browser.page_source)
         order_num = html('.order-id').items()
         for a in order_num:
@@ -74,7 +66,6 @@ class TuNiu:
         browser.quit()
         self.data(html)
 
-    #数据二次清洗
     def data(self,html):
         order_time = html('.item-time').items()
         order_num = html('.order-id').items()
@@ -122,7 +113,6 @@ class TuNiu:
         result.append(self.order_price[0])
         result.append(self.order_info[0][:4])
 
-#参数传递给gui
 def tuniugo():
     TuNiu()
     #print(result)
