@@ -10,6 +10,7 @@
   pip install -r requirements.txt
   ```
 
+
 + 源地址没改请在后面加 -i https://pypi.douban.com/simple
 
 + star_page.py是程序主入口 (运行前请检查依赖包有无问题)
