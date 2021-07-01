@@ -20,6 +20,7 @@
 
 ### 程序的设计
 
+
 + 本程序界面采用tkinter制作
 + 基于selenium进行数据爬取
 + 基于numpy和matplotlib进行数据分析及可视化
