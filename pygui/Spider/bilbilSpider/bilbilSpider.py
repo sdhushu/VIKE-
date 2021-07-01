@@ -5,6 +5,7 @@ from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+print('欢迎使用艾伦爬虫程序')
 result = []
 sum_result = []
 class BilBil:
